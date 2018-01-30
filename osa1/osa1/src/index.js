@@ -1,29 +1,35 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+const Osa = (props) => {
+    return (
+        <div>
+            <p>{props.nimi} {props.tehtavia}</p>
+        </div>
+    )
+}
+
 const Otsikko = (props) => (
     <div>
         <h1>{props.kurssi}</h1>
     </div>
 )
 
-const Sisalto = (props) => (
-    <div>
-        <p>{props.osa1} {props.tehtavia1}</p>
-        <p>{props.osa2} {props.tehtavia2}</p>
-        <p>{props.osa3} {props.tehtavia3}</p>
-    </div>
-)
+const Sisalto = (props) => {
+    return (
+      <div>
+        <Osa nimi={props.osa1} tehtavia={props.tehtavia1} />
+        <Osa nimi={props.osa2} tehtavia={props.tehtavia2} />
+        <Osa nimi={props.osa3} tehtavia={props.tehtavia3} />
+      </div>
+    )
+  }
 
 const Yhteensa = (props) => (
     <div>
-        <p>yhteensä {props.tehtavia1 + props.tehtavia2 + props.tehtavia3} tehtävää</p>
+        <p>yhteensä {props.tehtavia} tehtävää</p>
     </div>
 )
-
-//Otsikko huolehtii kurssin nimen renderöimisestä
-// Sisalto osista ja niiden tehtävämääristä ja
-//Yhteensa tehtävien yhteismäärästä.
 
 const App = () => {
   const kurssi = 'Half Stack -sovelluskehitys'
@@ -39,8 +45,7 @@ const App = () => {
       <Otsikko kurssi={kurssi} />
       <Sisalto osa1={osa1} tehtavia1={tehtavia1} osa2={osa2}
        tehtavia2={tehtavia2} osa3={osa3} tehtavia3={tehtavia3} />
-      <Yhteensa tehtavia1={tehtavia1} tehtavia2={tehtavia2}
-       tehtavia3={tehtavia3} />
+      <Yhteensa tehtavia={tehtavia1 + tehtavia2 + tehtavia3} />
     </div>
   )
 }

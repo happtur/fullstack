@@ -7,9 +7,9 @@ const Button = ({ handleClick, text }) => (
     </button>
 )
 
-const Statistics = ({hyva, neutraali, huono}) => {
+const Statistics = ({ hyva, neutraali, huono }) => {
     let total = hyva + neutraali + huono
-    if (total == 0) {
+    if (total === 0) {
         return (
             <div>
                 <b>ei yhtään palautetta annettu</b>
@@ -19,20 +19,25 @@ const Statistics = ({hyva, neutraali, huono}) => {
     const sum = hyva - huono
 
     return (
-    <div>
-        <Statistic name='hyvä' value={hyva} />
-        <Statistic name='neutraali' value={neutraali} />
-        <Statistic name='huono' value={huono} />
-        <Statistic name='keskiarvo' value={(sum / total).toFixed(1)} />
-        <Statistic name='positiivisia' value={((hyva / total) * 100).toFixed(1)} unit=' %' />
-    </div>
+        <div>
+            <table>
+                <tbody>
+                <Statistic name='hyvä' value={hyva} />
+                <Statistic name='neutraali' value={neutraali} />
+                <Statistic name='huono' value={huono} />
+                <Statistic name='keskiarvo' value={(sum / total).toFixed(1)} />
+                <Statistic name='positiivisia' value={((hyva / total) * 100).toFixed(1)} unit=' %' />
+                </tbody>
+            </table>
+        </div>
     )
 }
 
-const Statistic = ({name, value, unit}) => (
-    <div>
-        {name} {value} {unit}
-    </div>
+const Statistic = ({ name, value, unit }) => (
+    <tr>
+        <td>{name}</td>
+        <td>{value} {unit}</td>
+    </tr>
 )
 
 class App extends React.Component {

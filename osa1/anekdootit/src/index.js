@@ -19,13 +19,29 @@ class App extends React.Component {
   }
 
   render() {
+    let votes = 0
+    let winner = 0
+
+    this.state.votes.forEach((value, index) => {
+        if(value > votes) {
+            votes = value
+            winner = index
+        }
+    })
+
+    const winningAnecdote = anecdotes[winner]
     
     return (
       <div>
         {this.props.anecdotes[this.state.selected]}
         <div>
-        <Button handleClick={() => this.randomSelected()} text='nextanecdote' />
-        <Button handleClick={() => this.vote()} text='vote' />
+            <Button handleClick={() => this.randomSelected()} text='nextanecdote' />
+            <Button handleClick={() => this.vote()} text='vote' />
+        </div>
+        <div>
+            <h4>anecdote with most votes:</h4>
+            {winningAnecdote}<br/>
+             has {votes} votes
         </div>
       </div>
     )

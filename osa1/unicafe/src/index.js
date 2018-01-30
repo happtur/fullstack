@@ -8,9 +8,15 @@ const Button = ({ handleClick, text }) => (
 )
 
 const Statistics = ({hyva, neutraali, huono}) => {
-    const sum = hyva - huono
     let total = hyva + neutraali + huono
-    if (total == 0) { total = 1 }
+    if (total == 0) {
+        return (
+            <div>
+                <b>ei yhtään palautetta annettu</b>
+            </div>
+        )
+    }
+    const sum = hyva - huono
 
     return (
     <div>

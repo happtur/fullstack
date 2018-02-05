@@ -26,11 +26,9 @@ const Kurssi = ({ kurssi }) => {
 
 const Yhteensa = (props) => {
     const osat = props.kurssi.osat
-    let summa = 0
-    osat.forEach(osa => summa += osa.tehtavia)
-
+    
     return (
-        <p>yhteensä {summa} tehtävää</p>
+        <p>yhteensä {osat.reduce((summa,osa) => summa + osa.tehtavia, 0)} tehtävää</p>
     )
 }
 

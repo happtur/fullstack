@@ -1,7 +1,7 @@
 import React from 'react';
-import axios from 'axios'
 import Person from './components/Person'
 import AddPersonForm from './components/AddPersonForm';
+import personService from './services/persons'
 
 class App extends React.Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:3001/persons').then(response => this.setState({persons: response.data}))
+    personService.getAll().then(response => this.setState({ persons: response }))
   }
 
   handleNameChange = (event) => {
@@ -27,7 +27,7 @@ class App extends React.Component {
   }
 
   handleFilterChange = (event) => {
-    this.setState({filter: event.target.value})
+    this.setState({ filter: event.target.value })
   }
 
   addPerson = (event) => {
@@ -36,34 +36,34 @@ class App extends React.Component {
       return
     }
 
-    const newPerson = {name: this.state.newName, number: this.state.newNumber}
+    const newPerson = { name: this.state.newName, number: this.state.newNumber }
 
-    axios
-    .post('http://localhost:3001/persons', newPerson)
-    .then(response => {
-      this.setState({
-        persons: this.state.persons.concat(response.data),
-        newName: '',
-        newNumber: ''
+    personService
+      .create(newPerson)
+      .then(person => {
+        this.setState({
+          persons: this.state.persons.concat(person),
+          newName: '',
+          newNumber: ''
+        })
       })
-    })
   }
 
   render() {
-    const chosenPersons= this.state.filter === '' ? 
-      this.state.persons : 
+    const chosenPersons = this.state.filter === '' ?
+      this.state.persons :
       this.state.persons.filter(
-        (person) => 
-        person.name.toLocaleLowerCase().includes(this.state.filter.toLocaleLowerCase())
+        (person) =>
+          person.name.toLocaleLowerCase().includes(this.state.filter.toLocaleLowerCase())
       )
 
     return (
       <div>
         <h2>Puhelinluettelo</h2>
         <div>
-          rajaa näytettäviä <input 
-          value={this.state.filter}
-          onChange={this.handleFilterChange}/>
+          rajaa näytettäviä <input
+            value={this.state.filter}
+            onChange={this.handleFilterChange} />
         </div>
         <AddPersonForm
           submit={this.addPerson}

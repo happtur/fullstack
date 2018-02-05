@@ -1,11 +1,7 @@
 import React from 'react';
-
-const Person = ({person}) => (
-  <tr>
-  <td>{person.name}</td>
-  <td>{person.number}</td>
-  </tr>
-)
+//import AddPersonForm from './components/AddPersonForm'
+import Person from './components/Person'
+import AddPersonForm from './components/AddPersonForm';
 
 class App extends React.Component {
   constructor(props) {
@@ -44,25 +40,18 @@ class App extends React.Component {
     return (
       <div>
         <h2>Puhelinluettelo</h2>
-        <form onSubmit={this.addPerson}>
-          <div>
-            nimi: <input
-              value={this.state.newName}
-              onChange={this.handleNameChange}
-            />
-          </div>
-          <div>
-            numero: <input
-              value={this.state.newNumber}
-              onChange={this.handleNumberChange} />
-          </div>
-          <div>
-            <button type="submit">lisää</button>
-          </div>
-        </form>
+        <AddPersonForm
+          submit={this.addPerson}
+          nameValue={this.state.newName}
+          nameHandler={this.handleNameChange}
+          numberValue={this.state.newNumber}
+          numberHandler={this.handleNumberChange}
+        />
         <h2>Numerot</h2>
         <table>
-        {this.state.persons.map(person => <Person key={person.name} person={person} />)}
+          <tbody>
+            {this.state.persons.map(person => <Person key={person.name} person={person} />)}
+          </tbody>
         </table>
       </div >
     )

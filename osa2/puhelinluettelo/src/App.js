@@ -6,20 +6,24 @@ class App extends React.Component {
     this.state = {
       persons: [
         { name: 'Arto Hellas' },
-        {name: 'testi'}
+        { name: 'testi' }
       ],
       newName: ''
     }
   }
 
   handleChange = (event) => {
-    this.setState({newName: event.target.value})
+    this.setState({ newName: event.target.value })
   }
 
   addPerson = (event) => {
     event.preventDefault()
-    const persons = this.state.persons.concat({name: this.state.newName})
-    this.setState({persons, newName: ''})
+    if (this.state.persons.find((person) => (person.name === this.state.newName )) !== undefined) {
+      return
+    }
+
+    const persons = this.state.persons.concat({ name: this.state.newName })
+    this.setState({ persons, newName: '' })
   }
 
   render() {
@@ -29,9 +33,9 @@ class App extends React.Component {
         <form onSubmit={this.addPerson}>
           <div>
             nimi: <input
-            value={this.state.newName}
-            onChange={this.handleChange}
-             />
+              value={this.state.newName}
+              onChange={this.handleChange}
+            />
           </div>
           <div>
             <button type="submit">lisää</button>

@@ -1,29 +1,43 @@
 import React from 'react';
 
+const Person = ({person}) => (
+  <tr>
+  <td>{person.name}</td>
+  <td>{person.number}</td>
+  </tr>
+)
+
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       persons: [
-        { name: 'Arto Hellas' },
-        { name: 'testi' }
+        {
+          name: 'Arto Hellas',
+          number: '123456'
+        }
       ],
-      newName: ''
+      newName: '',
+      newNumber: ''
     }
   }
 
-  handleChange = (event) => {
+  handleNameChange = (event) => {
     this.setState({ newName: event.target.value })
+  }
+
+  handleNumberChange = (event) => {
+    this.setState({ newNumber: event.target.value })
   }
 
   addPerson = (event) => {
     event.preventDefault()
-    if (this.state.persons.find((person) => (person.name === this.state.newName )) !== undefined) {
+    if (this.state.persons.find((person) => (person.name === this.state.newName)) !== undefined) {
       return
     }
 
-    const persons = this.state.persons.concat({ name: this.state.newName })
-    this.setState({ persons, newName: '' })
+    const persons = this.state.persons.concat({ name: this.state.newName, number: this.state.newNumber })
+    this.setState({ persons, newName: '', newNumber: '' })
   }
 
   render() {
@@ -34,16 +48,23 @@ class App extends React.Component {
           <div>
             nimi: <input
               value={this.state.newName}
-              onChange={this.handleChange}
+              onChange={this.handleNameChange}
             />
+          </div>
+          <div>
+            numero: <input
+              value={this.state.newNumber}
+              onChange={this.handleNumberChange} />
           </div>
           <div>
             <button type="submit">lisää</button>
           </div>
         </form>
         <h2>Numerot</h2>
-        {this.state.persons.map(person => <p key={person.name}>{person.name}</p>)}
-      </div>
+        <table>
+        {this.state.persons.map(person => <Person key={person.name} person={person} />)}
+        </table>
+      </div >
     )
   }
 }

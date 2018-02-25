@@ -5,7 +5,7 @@ const { initialBlogs, blogNotInInitialBlogs, blogWithoutALikesValue, blogWithout
     nonExistingId, blogsInDb } = require('./test_helper')
 const Blog = require('../models/blog')
 
-describe('when there are some blogs saved', () => {
+describe.skip('when there are some blogs saved', () => {
     beforeAll(async () => {
         await Blog.remove({})
 
@@ -31,7 +31,7 @@ describe('when there are some blogs saved', () => {
     })
 })
 
-describe('addition of a new blog', () => {
+describe.skip('addition of a new blog', () => {
 
     test('POST /api/blogs succeeds with valid data', async () => {
         const blogsBefore = await blogsInDb()
@@ -94,7 +94,7 @@ describe('addition of a new blog', () => {
     })
 })
 
-describe('deletion of a blog', () => {
+describe.skip('deletion of a blog', () => {
     let addedBlog
 
     beforeAll(async () => {

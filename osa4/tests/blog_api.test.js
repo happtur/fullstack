@@ -28,12 +28,6 @@ const initialBlogs = [
         author: "Robert C. Martin",
         url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
         likes: 10
-    },
-    {
-        title: "TDD harms architecture",
-        author: "Robert C. Martin",
-        url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
-        likes: 0
     }
 ]
 
@@ -48,6 +42,12 @@ blogWithoutAUrl = {
     title: "Type wars",
     author: "Robert C. Martin",
     likes: 2
+}
+
+blogWithoutALikesValue = {
+    title: "TDD harms architecture",
+    author: "Robert C. Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html"
 }
 
 beforeAll(async () => {
@@ -114,8 +114,22 @@ describe('adding', () => {
 
         const responseAfter = await api
             .get('/api/blogs')
-        
+
         expect(responseAfter.body.length).toBe(responseBefore.body.length)
+    })
+
+    test('a blog without a likes-value sets it to 0', async () => {
+        const newBlog = new Blog(blogWithoutALikesValue)
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+
+        const response = await api
+            .get('/api/blogs')
+
+        const addedBlog = response.body.find(blog => blog.url === blogWithoutALikesValue.url)
+        expect(addedBlog.likes).toBe(0)
     })
 })
 

@@ -8,11 +8,16 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
     try {
-        if (request.body.url === undefined) {
+        const body = request.body
+
+        if (body.url === undefined) {
             return response.status(400).json({ error: 'url missing' })
         }
 
-        const blog = new Blog(request.body)
+        const blog = new Blog({
+            ...body,
+            likes: body.likes === undefined ? 0 : body.likes
+        })
         const result = await blog.save()
         response.status(201).json(result)
     } catch (exception) {

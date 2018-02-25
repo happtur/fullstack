@@ -46,6 +46,13 @@ const blogWithoutATitle =     {
     likes: 10
 }
 
+const blogForDeletion = {
+    title: "First class tests",
+    author: "Robert C. Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+    likes: 10
+}
+
 const nonExistingId = async () => {
   const blog = new Blog()
   await blog.save()
@@ -60,6 +67,6 @@ const blogsInDb = async () => {
 }
 
 module.exports = {
-  initialBlogs, blogNotInInitialBlogs, blogWithoutALikesValue, blogWithoutAUrl, blogWithoutATitle,
+  initialBlogs, blogNotInInitialBlogs, blogWithoutALikesValue, blogWithoutAUrl, blogWithoutATitle, blogForDeletion,
   nonExistingId, blogsInDb
 }

@@ -1,7 +1,7 @@
 const supertest = require('supertest')
 const { app, server } = require('../index')
 const api = supertest(app)
-const { initialBlogs, blogNotInInitialBlogs, blogWithoutALikesValue, blogWithoutAUrl, blogWithoutATitle,
+const { initialBlogs, blogNotInInitialBlogs, blogWithoutALikesValue, blogWithoutAUrl, blogWithoutATitle, blogForDeletion,
     nonExistingId, blogsInDb } = require('./test_helper')
 const Blog = require('../models/blog')
 
@@ -95,6 +95,26 @@ describe('addition of a new blog', () => {
 })
 
 describe('deletion of a blog', () => {
+    let addedBlog
+
+    beforeAll(async () => {
+        addedBlog = new Blog(blogForDeletion)
+        await addedBlog.save()
+    })
+
+    test('DELETE /api/blogs/:id succeeds with proper status code', async () => {
+        const blogsBefore = await blogsInDb()
+
+        await api
+            .delete(`/api/blogs/${addedBlog._id}`)
+            .expect(204)
+        
+        const blogsAfter = await blogsInDb()
+
+        const urls = blogsAfter.map(blog => blog.url)
+        expect(urls).not.toContain(addedBlog.url)
+        expect(blogsAfter.length).toBe(blogsBefore.length - 1)
+    })
 })
 
 afterAll(() => {

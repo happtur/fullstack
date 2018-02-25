@@ -10,8 +10,8 @@ blogsRouter.post('/', async (request, response) => {
     try {
         const body = request.body
 
-        if (body.url === undefined) {
-            return response.status(400).json({ error: 'url missing' })
+        if (body.url === undefined || body.title === undefined) {
+            return response.status(400).json({ error: 'url or title missing' })
         }
 
         const blog = new Blog({

@@ -22,12 +22,6 @@ const initialBlogs = [
         author: "Edsger W. Dijkstra",
         url: "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
         likes: 5
-    },
-    {
-        title: "First class tests",
-        author: "Robert C. Martin",
-        url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
-        likes: 10
     }
 ]
 
@@ -38,10 +32,16 @@ blogNotInInitialBlogs = {
     likes: 2
 }
 
-blogWithoutAUrl = {
-    title: "Type wars",
+blogWithoutAUrl =     {
+    title: "First class tests",
     author: "Robert C. Martin",
-    likes: 2
+    likes: 10
+}
+
+blogWithoutATitle =     {
+    author: "Robert C. Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
+    likes: 10
 }
 
 blogWithoutALikesValue = {
@@ -106,6 +106,23 @@ describe('adding', () => {
             .get('/api/blogs')
 
         const newBlog = new Blog(blogWithoutAUrl)
+
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+
+        const responseAfter = await api
+            .get('/api/blogs')
+
+        expect(responseAfter.body.length).toBe(responseBefore.body.length)
+    })
+
+    test('a blog without a title fails', async () => {
+        const responseBefore = await api
+            .get('/api/blogs')
+
+        const newBlog = new Blog(blogWithoutATitle)
 
         await api
             .post('/api/blogs')

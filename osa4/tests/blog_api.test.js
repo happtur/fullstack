@@ -34,14 +34,21 @@ const initialBlogs = [
         author: "Robert C. Martin",
         url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html",
         likes: 0
-    },
-    {
-        title: "Type wars",
-        author: "Robert C. Martin",
-        url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-        likes: 2
     }
 ]
+
+blogNotInInitialBlogs = {
+    title: "Type wars",
+    author: "Robert C. Martin",
+    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+    likes: 2
+}
+
+blogWithoutAUrl = {
+    title: "Type wars",
+    author: "Robert C. Martin",
+    likes: 2
+}
 
 beforeAll(async () => {
     await Blog.remove({})
@@ -68,12 +75,48 @@ describe('get all blogs', () => {
 
     test('response contains a specific blog', async () => {
         const response = await api
-          .get('/api/blogs')
-      
+            .get('/api/blogs')
+
         const urls = response.body.map(blog => blog.url)
-      
+
         expect(urls).toContain(initialBlogs[0].url)
-      })
+    })
+})
+
+describe('adding', () => {
+
+    test('a valid blog is succesful', async () => {
+        const newBlog = new Blog(blogNotInInitialBlogs)
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const response = await api
+            .get('/api/blogs')
+
+        const urls = response.body.map(blog => blog.url)
+        expect(urls).toContain(blogNotInInitialBlogs.url)
+        expect(urls.length).toBe(initialBlogs.length + 1)
+    })
+
+    test('a blog without a url fails', async () => {
+        const responseBefore = await api
+            .get('/api/blogs')
+
+        const newBlog = new Blog(blogWithoutAUrl)
+
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
+
+        const responseAfter = await api
+            .get('/api/blogs')
+        
+        expect(responseAfter.body.length).toBe(responseBefore.body.length)
+    })
 })
 
 afterAll(() => {

@@ -63,6 +63,8 @@ const listWithManyBlogs = [
   }
 ]
 
+describe.skip('helpers', () => {
+
 test('dummy is called', () => {
   const blogs = []
 
@@ -100,5 +102,7 @@ describe('favourite blog', () => {
     const result = listHelper.favoriteBlog(listWithManyBlogs)
     expect(result).toEqual(blog2)
   })
+
+})
 
 })

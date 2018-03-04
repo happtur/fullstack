@@ -1,4 +1,5 @@
 import React from 'react'
+import Notification from './components/Notification'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -15,7 +16,7 @@ class App extends React.Component {
       username: '',
       password: '',
       user: null,
-      error: null,
+      message: null,
       title: '',
       author: '',
       url: ''
@@ -52,10 +53,10 @@ class App extends React.Component {
       this.setState({ username: '', password: '', user })
     } catch (exception) {
       this.setState({
-        error: 'wrong username or password',
+        message: 'wrong username or password',
       })
       setTimeout(() => {
-        this.setState({ error: null })
+        this.setState({ message: null })
       }, 5000)
     }
   }
@@ -73,24 +74,35 @@ class App extends React.Component {
       author: this.state.author,
       url: this.state.url
     })
+
+    const message = `a new blog '${this.state.title}' by ${this.state.author} added`
+
     this.setState({
       blogs: this.state.blogs.concat(blog),
       title: '',
       author: '',
-      url: ''
+      url: '',
+      message
     })
+    setTimeout(() => {
+      this.setState({ message: null })
+    }, 5000)
   }
 
   render() {
     if (this.state.user === null) {
       return (
+        <div>
+        <Notification message={this.state.message} />
         <LoginForm handleSubmit={this.login} handleFieldChange={this.handleFieldChange} username={this.state.username} password={this.state.password} />
+        </div>
       )
     }
 
     return (
       <div>
         <h2>blogs</h2>
+        <Notification message={this.state.message} />
         <div>
           {this.state.user.name} logged in
       <button type="button" onClick={this.logout}>log out</button>

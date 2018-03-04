@@ -29,19 +29,19 @@ const blogNotInInitialBlogs = {
     likes: 2
 }
 
-const blogWithoutALikesValue = {
+const blogWithoutLikesValue = {
     title: "TDD harms architecture",
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html"
 }
 
-const blogWithoutAUrl =     {
+const blogWithoutUrl =     {
     title: "First class tests",
     author: "Robert C. Martin",
     likes: 10
 }
 
-const blogWithoutATitle =     {
+const blogWithoutTitle =     {
     author: "Robert C. Martin",
     url: "http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll",
     likes: 10

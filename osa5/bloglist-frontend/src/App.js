@@ -1,7 +1,11 @@
 import React from 'react'
 import Blog from './components/Blog'
+import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable';
 import blogService from './services/blogs'
 import loginService from './services/login'
+
 
 class App extends React.Component {
   constructor(props) {
@@ -80,30 +84,7 @@ class App extends React.Component {
   render() {
     if (this.state.user === null) {
       return (
-        <div>
-          <h2>Kirjaudu sovellukseen</h2>
-          <form onSubmit={this.login}>
-            <div>
-              Käyttäjätunnus
-            <input
-                type="text"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleFieldChange}
-              />
-            </div>
-            <div>
-              Salasana
-            <input
-                type="password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleFieldChange}
-              />
-            </div>
-            <button type="submit">Kirjaudu</button>
-          </form>
-        </div>
+        <LoginForm login={this.login} handleFieldChange={this.handleFieldChange} username={this.state.username} password={this.state.password} />
       )
     }
 
@@ -114,40 +95,13 @@ class App extends React.Component {
           {this.state.user.name} logged in
       <button type="button" onClick={this.logout}>log out</button>
         </div>
+        <Togglable buttonLabel="add blog">
+          <BlogForm addBlog={this.addBlog} handleFieldChange={this.handleFieldChange} newTitle={this.state.title} newAuthor={this.state.author} newUrl={this.state.url} />
+        </Togglable>
         <div>
           {this.state.blogs.map(blog =>
             <Blog key={blog._id} blog={blog} />
           )}
-        </div>
-        <div>
-          <h3>create new</h3>
-          <form onSubmit={this.addBlog}>
-            <div>title
-              <input
-                type="text"
-                name="title"
-                value={this.state.title}
-                onChange={this.handleFieldChange}
-              />
-            </div>
-            <div>author
-            <input
-                type="text"
-                name="author"
-                value={this.state.author}
-                onChange={this.handleFieldChange}
-              />
-            </div>
-            <div>url
-              <input
-                type="text"
-                name="url"
-                value={this.state.url}
-                onChange={this.handleFieldChange}
-              />
-            </div>
-            <button type="submit">create</button>
-          </form>
         </div>
       </div>
     )

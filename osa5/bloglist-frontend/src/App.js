@@ -11,7 +11,10 @@ class App extends React.Component {
       username: '',
       password: '',
       user: null,
-      error: null
+      error: null,
+      title: '',
+      author: '',
+      url: ''
     }
   }
 
@@ -23,27 +26,29 @@ class App extends React.Component {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      this.setState({user})
+      blogService.setToken(user.token)
+      this.setState({ user })
     }
   }
 
-  handleLoginFieldChange = (event) => {
+  handleFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
 
   login = async (event) => {
     event.preventDefault()
-    try{
+    try {
       const user = await loginService.login({
         username: this.state.username,
         password: this.state.password
       })
-  
+
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
-      this.setState({ username: '', password: '', user})
-    } catch(exception) {
+      blogService.setToken(user.token)
+      this.setState({ username: '', password: '', user })
+    } catch (exception) {
       this.setState({
-        error: 'käyttäjätunnus tai salasana virheellinen',
+        error: 'wrong username or password',
       })
       setTimeout(() => {
         this.setState({ error: null })
@@ -53,50 +58,100 @@ class App extends React.Component {
 
   logout = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
-    this.setState({user: null})
+    blogService.setToken(null)
+    this.setState({ user: null })
   }
 
-render() {
-  if (this.state.user === null) {
+  addBlog = async (event) => {
+    event.preventDefault()
+    const blog = await blogService.create({
+      title: this.state.title,
+      author: this.state.author,
+      url: this.state.url
+    })
+    this.setState({
+      blogs: this.state.blogs.concat(blog),
+      title: '',
+      author: '',
+      url: ''
+    })
+  }
+
+  render() {
+    if (this.state.user === null) {
+      return (
+        <div>
+          <h2>Kirjaudu sovellukseen</h2>
+          <form onSubmit={this.login}>
+            <div>
+              Käyttäjätunnus
+            <input
+                type="text"
+                name="username"
+                value={this.state.username}
+                onChange={this.handleFieldChange}
+              />
+            </div>
+            <div>
+              Salasana
+            <input
+                type="password"
+                name="password"
+                value={this.state.password}
+                onChange={this.handleFieldChange}
+              />
+            </div>
+            <button type="submit">Kirjaudu</button>
+          </form>
+        </div>
+      )
+    }
+
     return (
       <div>
-        <h2>Kirjaudu sovellukseen</h2>
-        <form onSubmit={this.login}>
-          <div>
-            Käyttäjätunnus
+        <h2>blogs</h2>
+        <div>
+          {this.state.user.name} logged in
+      <button type="button" onClick={this.logout}>log out</button>
+        </div>
+        <div>
+          {this.state.blogs.map(blog =>
+            <Blog key={blog._id} blog={blog} />
+          )}
+        </div>
+        <div>
+          <h3>create new</h3>
+          <form onSubmit={this.addBlog}>
+            <div>title
+              <input
+                type="text"
+                name="title"
+                value={this.state.title}
+                onChange={this.handleFieldChange}
+              />
+            </div>
+            <div>author
             <input
-              type="text"
-              name="username"
-              value={this.state.username}
-              onChange={this.handleLoginFieldChange}
-            />
-          </div>
-          <div>
-            Salasana
-            <input
-              type="password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleLoginFieldChange}
-            />
-          </div>
-          <button type="submit">Kirjaudu</button>
-        </form>
+                type="text"
+                name="author"
+                value={this.state.author}
+                onChange={this.handleFieldChange}
+              />
+            </div>
+            <div>url
+              <input
+                type="text"
+                name="url"
+                value={this.state.url}
+                onChange={this.handleFieldChange}
+              />
+            </div>
+            <button type="submit">create</button>
+          </form>
+        </div>
       </div>
     )
   }
-
-  return (
-    <div>
-      <h2>blogs</h2>
-      {this.state.user.name} logged in
-      <button type="button" onClick={this.logout}>log out</button>
-      {this.state.blogs.map(blog =>
-        <Blog key={blog._id} blog={blog} />
-      )}
-    </div>
-  )
-}
 }
 
 export default App;

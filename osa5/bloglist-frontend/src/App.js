@@ -84,7 +84,7 @@ class App extends React.Component {
   render() {
     if (this.state.user === null) {
       return (
-        <LoginForm login={this.login} handleFieldChange={this.handleFieldChange} username={this.state.username} password={this.state.password} />
+        <LoginForm handleSubmit={this.login} handleFieldChange={this.handleFieldChange} username={this.state.username} password={this.state.password} />
       )
     }
 
@@ -96,7 +96,7 @@ class App extends React.Component {
       <button type="button" onClick={this.logout}>log out</button>
         </div>
         <Togglable buttonLabel="add blog">
-          <BlogForm addBlog={this.addBlog} handleFieldChange={this.handleFieldChange} newTitle={this.state.title} newAuthor={this.state.author} newUrl={this.state.url} />
+          <BlogForm handleSubmit={this.addBlog} handleFieldChange={this.handleFieldChange} newTitle={this.state.title} newAuthor={this.state.author} newUrl={this.state.url} />
         </Togglable>
         <div>
           {this.state.blogs.map(blog =>

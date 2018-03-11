@@ -8,7 +8,7 @@ const notificationReducer = (state = 'hello', action) => {
     return state
   }
 
-  export const settingNotification = (message) => {
+  export const setNotification = (message) => {
     return {
       type: 'SET_NOTIFICATION',
       data: {message}
